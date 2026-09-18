@@ -7,11 +7,15 @@ pipeline {
             }
         }
         stage('Push') {
-            steps {
-                sh 'docker tag workshop-app:latest registry.local/workshop-app:latest'
-                sh 'docker push registry.local/workshop-app:latest'
-            }
-        }
+	  steps {
+        	script {
+            		docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credentials') {
+                	docker.image("reza1007/workshop-app:latest").push()
+  		       }
+       	 }
+    }
+}
+
         stage('Deploy') {
             steps {
                 sh 'kubectl apply -f k8s/deployment.yaml'
