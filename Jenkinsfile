@@ -7,14 +7,17 @@ pipeline {
             }
         }
         stage('Push') {
-	  steps {
-        	script {
-            		docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credentials') {
-                	docker.image("reza1007/workshop-app:latest").push()
-  		       }
-       	 }
-    }
-}
+	    steps {
+        	withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials',
+                                          usernameVariable: 'DOCKER_USER',
+                                          passwordVariable: 'DOCKER_PASS')]) {
+            sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
+            sh 'docker tag workshop-app:latest $DOCKER_USER/workshop-app:latest'
+            sh 'docker push $DOCKER_USER/workshop-app:latest'
+       			 }
+   		 }
+	}
+
 
         stage('Deploy') {
             steps {
