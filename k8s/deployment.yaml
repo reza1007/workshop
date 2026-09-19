@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: workshop-app
-        image: registry.local/workshop-app:latest
+        image: reza1007/workshop-app:latest
         ports:
         - containerPort: 8080
 ---
