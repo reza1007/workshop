@@ -163,6 +163,31 @@ pipeline {
 10. Verify & Access App
 bash
 kubectl get pods
+kubectl port-forward svc/workshop-app-service 8081:80\n
+# if use ingress
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml\n
+sudo vi ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: workshop-app-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: localhost
+    http:
+      paths:
+      - path: /app
+        pathType: Prefix
+        backend:
+          service:
+            name: workshop-app-service
+            port:
+              number: 80
+
+kubectl apply -f ingress.yaml\n
 kubectl port-forward -n ingress-nginx svc/ingress-nginx-controller 8082:80
 Open in browser: http://localhost:8082/app
 
