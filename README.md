@@ -39,7 +39,6 @@ bash
 kind delete cluster --name workshop
 Create a config file kind-cluster.yaml:
 
-yaml
 kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
 nodes:
@@ -163,7 +162,9 @@ pipeline {
 10. Verify & Access App
 bash
 kubectl get pods
-kubectl port-forward svc/workshop-app-service 8081:80\n
+kubectl port-forward svc/workshop-app-service 8081:80
+Open in browser: http://localhost:8081
+
 # if use ingress
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml\n
 sudo vi ingress.yaml
