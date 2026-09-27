@@ -66,10 +66,21 @@ bash
 sudo apt install openjdk-21-jdk -y
 java -version
 
+Option A: Install via Package Repo
+bash
+sudo apt install openjdk-21-jdk -y
+java -version
+
 wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key | sudo tee /usr/share/keyrings/jenkins-keyring.asc > /dev/null
 echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian-stable binary/ | sudo tee /etc/apt/sources.list.d/jenkins.list > /dev/null
-sudo apt update && sudo apt install jenkins -y
+sudo apt update && sudo apt install jenkins=2.568.3 -y
+Option B: Manual .deb Install
+bash
+wget https://pkg.jenkins.io/debian-stable/binary/jenkins_2.568.3_all.deb
+sudo apt install ./jenkins_2.568.3_all.deb -y
+Enable and start Jenkins:
 
+bash
 sudo systemctl enable jenkins
 sudo systemctl start jenkins
 Access Jenkins: http://localhost:8080  
