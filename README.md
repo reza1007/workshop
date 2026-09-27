@@ -30,10 +30,37 @@ chmod +x ./kind && sudo mv ./kind /usr/local/bin/
 # kubectl
 curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
 chmod +x kubectl && sudo mv kubectl /usr/local/bin/
-4. Create Kubernetes Cluster
+4. Create Multi‑Node Kubernetes Cluster
+By default, Kind creates a single‑node cluster. For this workshop, we’ll use 1 control plane + 1 worker node.
+
+Delete any existing cluster:
+
 bash
-kind create cluster --name workshop
+kind delete cluster --name workshop
+Create a config file kind-cluster.yaml:
+
+yaml
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+  - role: control-plane
+  - role: worker
+Create the new cluster:
+
+bash
+kind create cluster --name workshop --config kind-cluster.yaml
+Verify nodes:
+
+bash
 kubectl get nodes
+Expected:
+
+Code
+workshop-control-plane   Ready   control-plane
+workshop-worker          Ready   <none>
+
+# Label the worker node
+kubectl label nodes kind-worker node-role.kubernetes.io/worker=""
 5. Install Java 21 + Jenkins
 bash
 sudo apt install openjdk-21-jdk -y
@@ -116,13 +143,16 @@ kubectl get pods
 kubectl port-forward -n ingress-nginx svc/ingress-nginx-controller 8082:80
 Open in browser: http://localhost:8082/app
 
+📊 Architecture Diagram
+Code
+GitHub Repo  --->  Jenkins Pipeline  --->  DockerHub (Image Registry)  --->  Kubernetes Cluster  --->  Web Browser (App)
 ✅ End Result:
 
 WSL2 + Ubuntu installed
 
 Docker, Kind, kubectl set up
 
-Kubernetes cluster created
+Multi‑node cluster (1 control plane + 1 worker) created
 
 Jenkins installed with Java 21
 
