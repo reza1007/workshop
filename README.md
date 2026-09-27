@@ -88,6 +88,18 @@ Unlock Jenkins:
 
 bash
 sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+
+Configure kubeconfig for Jenkins
+By default, Jenkins runs as the jenkins user and cannot access your personal kubeconfig. Copy it into Jenkins’s home:
+
+bash
+sudo mkdir -p /var/lib/jenkins/.kube
+sudo cp ~/.kube/config /var/lib/jenkins/.kube/config
+sudo chown -R jenkins:jenkins /var/lib/jenkins/.kube
+Verify:
+
+bash
+sudo -u jenkins kubectl get nodes
 6. Use GitHub Repo
 Fork or clone this repo into your own GitHub account:
 
